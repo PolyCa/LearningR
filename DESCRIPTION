@@ -1,3 +1,4 @@
+Title: LearningR
 Package: LearningR
 Type: Project
 Version: 0.0.1
@@ -5,3 +6,6 @@ Imports:
     knitr,
     rmarkdown
 Encoding: UTF-8
+usethis: :gh_token_help()
+URL: https://github.com/PolyCa/LearningR
+BugReports: https://github.com/PolyCa/LearningR/issues
