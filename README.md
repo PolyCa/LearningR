@@ -1,3 +1,5 @@
+Christian Velling Thorup - Skeletal muscle 
+
 TODO: Add more to the title of your project here
 
 # LearningR:
