@@ -1,57 +1,66 @@
 ---
-title: "repproduce"
-author: "CVT"
-format: html
+title: "Reproducible documents"
+format:
+  html:
+    theme: lumen
 ---
 
-1. Name: Christian Velling Thorup 
-2. Affiliation Department of Cardiology, Aarhus University Hospital, Steno Diabetes Center, Aarhus University Hospital and Department of Biomedicine
-3. Aarhus University
+1. Name: **Christian Velling Thorup** 
+2. Affiliation: *Department of Cardiology, Aarhus University Hospital, Steno Diabetes Center, Aarhus University Hospital and Department of Biomedicine, Aarhus University.*
+3. **Aarhus University**
 
 # Intro 
 
-**Der var en gang en Christian. Christian var sej**
+**Spermidine**
 
-*Så sej*
+*A polyamine*
 
 # Methods and Results
 
-**Christian er sej**
+**Measuring**
 
-*Så sej*
+*High SPD induces autophagy*
 
 ## Analysis
 
-**Christian er sej**
+**Longivity**
 
-*Så sej*
+*Muscle regeneration*
 
 # Discussion
 
-**Christian er sej**
+**It is very good**
 
-*Så sej*
+*So good*
 
+## *Calculations*
 ```{r}
-2+2
+2 + 2 + 4 + 4 + 4 + 4 + 4 * 5 * (89)
 ```
 
 ```{r setup}
 #| message: false
 #| warning: false
+#| echo: false
 library(tidyverse)
 library(NHANES)
 NHANES_small <- read_csv(here::here("data/NHANES_small.csv"))
 ```
 
 ```{r}
+#| message: false
+#| warning: false
+#| echo: false
 NHANES_small <- select(NHANES_small, age, sex, bmi, diabetes, phys_active, bp_sys_ave, bp_dia_ave, education)
 
 NHANES_small
 ```
-#Table of results 
+# Table of results 
+
 ```{r}
+#| message: false
 #| warning: false
+#| echo: false
 NHANES_small %>%
   filter(!is.na(diabetes)) %>%
   group_by(diabetes, education) %>%
@@ -81,15 +90,88 @@ NHANES_small %>%
     mean_bmi = round(mean_bmi, 1),
     # Task 2b.
     education = str_to_sentence(education)
-  ) %>% 
+  ) %>%
   rename(
     # Task 3.
     "Diabetes Status" = diabetes,
     "Education" = education,
     "Mean Age" = mean_age,
     "Mean BMI" = mean_bmi
-  ) %>% 
+  ) %>%
   knitr::kable(caption = "Mean values of Age and BMI for each education and diabetes status.")
 ```
 
 
+SPD @fig-SPD_role
+
+![SPD role.](images/SPD_roles.png){#fig-SPD_role width="50%" height="50%"}
+
+### One variable plot 
+
+```{r}
+#| fig-cap: "Distribution of BMI"
+#| label: fig-bmi-histo
+#| message: false
+#| warning: false
+#| echo: false
+
+NHANES_small %>%
+  filter(bmi <= 60) %>%
+  ggplot(aes(x = bmi)) +
+  geom_histogram(na.rm = TRUE)
+```
+
+### **Second variable plot**  
+
+```{r}
+#| message: false
+#| echo: false
+#| label: fig-diabetes-education
+#| fig-cap: "Count of Diabetes and Education"
+#| fig-subcap:
+#| - "Education status"
+#| - "Number of Diabetes Yes and No"
+#| layout-ncol: 2
+
+NHANES_small %>%
+  filter(!is.na(education)) %>%
+  ggplot(aes(x = education)) +
+  geom_bar()
+
+NHANES_small %>%
+  filter(!is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes)) +
+  geom_bar()
+```
+
+###plotting two variables 
+
+```{r}
+NHANES_small %>%
+  ggplot(aes(x = bmi, y = bp_sys_ave)) +
+  geom_hex(na.rm = TRUE) +
+  geom_smooth(na.rm = TRUE)
+```
+## Plotting two discrete variables 
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+NHANES_small %>%
+  filter(!is.na(education), !is.na(diabetes)) %>%
+  ggplot(aes(x = diabetes, fill = education)) +
+  geom_bar(position = position_dodge())
+```
+
+## Plotting discrete and continous variables 
+
+```{r}
+#| message: false
+#| warning: false
+#| echo: false
+NHANES_small %>%
+  filter(!is.na(diabetes), bmi <= 60) %>%
+  ggplot(aes(x = diabetes, y = bmi)) +
+  geom_violin(na.rm = TRUE)
+```
